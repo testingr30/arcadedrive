@@ -57,25 +57,16 @@ export const useToolhouseAgent = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const runIdRef = useRef<string | null>(null);
-  const lastMessageRef = useRef<string | null>(null);
 
-  const sendMessage = useCallback(async (userMessage: string, isRetry = false) => {
-    // Store for potential retry
-    if (!isRetry) {
-      lastMessageRef.current = userMessage;
-    }
-
-    // Add user message (skip if retry)
-    if (!isRetry) {
-      const userMsg: Message = {
-        id: crypto.randomUUID(),
-        role: 'user',
-        content: userMessage,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, userMsg]);
-    }
-    
+  const sendMessage = useCallback(async (userMessage: string) => {
+    // Add user message
+    const userMsg: Message = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: userMessage,
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
     // Create placeholder for assistant message
@@ -169,16 +160,9 @@ export const useToolhouseAgent = () => {
     }
   }, []);
 
-  const retryLastMessage = useCallback(() => {
-    if (lastMessageRef.current) {
-      sendMessage(lastMessageRef.current, true);
-    }
-  }, [sendMessage]);
-
   const clearMessages = useCallback(() => {
     setMessages([]);
     runIdRef.current = null;
-    lastMessageRef.current = null;
   }, []);
 
   return {
@@ -186,7 +170,6 @@ export const useToolhouseAgent = () => {
     isLoading,
     sendMessage,
     clearMessages,
-    retryLastMessage,
     hasRunId: !!runIdRef.current,
   };
 };
