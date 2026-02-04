@@ -1,12 +1,15 @@
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 import { User, Bot } from 'lucide-react';
+import AuthConnectButton from './AuthConnectButton';
+import { StructuredContent } from '@/hooks/useToolhouseAgent';
 
 export interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  structuredContent?: StructuredContent;
 }
 
 interface MessageBubbleProps {
@@ -15,6 +18,7 @@ interface MessageBubbleProps {
 
 const MessageBubble = ({ message }: MessageBubbleProps) => {
   const isUser = message.role === 'user';
+  const hasAuthContent = message.structuredContent?.url && message.structuredContent?.integration;
 
   return (
     <div
@@ -134,6 +138,14 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
           >
             {message.content}
           </ReactMarkdown>
+
+          {/* Auth Connect Button */}
+          {hasAuthContent && (
+            <AuthConnectButton
+              url={message.structuredContent!.url!}
+              integration={message.structuredContent!.integration!}
+            />
+          )}
         </div>
       </div>
     </div>
