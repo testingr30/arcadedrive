@@ -3,21 +3,79 @@ import { Message } from '@/components/chat/MessageBubble';
 
 const AGENT_URL = 'https://agents.toolhouse.ai/4bf3221e-da92-42c9-89cd-ffc336220428';
 
+export interface StructuredContent {
+  url?: string;
+  integration?: string;
+}
+
+// Parse response to detect structured content (auth URLs, etc.)
+const parseStructuredContent = (content: string): { text: string; structured?: StructuredContent } => {
+  // Try to find JSON with structuredContent
+  const jsonMatch = content.match(/\{[\s\S]*"structuredContent"[\s\S]*\}/);
+  if (jsonMatch) {
+    try {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (parsed.structuredContent?.url && parsed.structuredContent?.integration) {
+        // Remove the JSON from the display text
+        const text = content.replace(jsonMatch[0], '').trim();
+        return {
+          text: text || 'Authentication required to continue.',
+          structured: parsed.structuredContent,
+        };
+      }
+    } catch {
+      // Not valid JSON, continue
+    }
+  }
+
+  // Check for authentication patterns in text
+  const authPatterns = [
+    /Authentication required/i,
+    /need.*permission.*access/i,
+    /connect.*Google.*Drive/i,
+    /authorize.*access/i,
+  ];
+
+  const needsAuth = authPatterns.some((pattern) => pattern.test(content));
+  
+  // Look for URL patterns that might be auth links
+  const urlMatch = content.match(/https:\/\/api\.toolhouse\.ai\/public\/integrations[^\s"')]+/);
+  if (needsAuth && urlMatch) {
+    return {
+      text: content.replace(urlMatch[0], '').trim(),
+      structured: {
+        url: urlMatch[0],
+        integration: 'googledrive',
+      },
+    };
+  }
+
+  return { text: content };
+};
+
 export const useToolhouseAgent = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const runIdRef = useRef<string | null>(null);
+  const lastMessageRef = useRef<string | null>(null);
 
-  const sendMessage = useCallback(async (userMessage: string) => {
-    // Add user message
-    const userMsg: Message = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: userMessage,
-      timestamp: new Date(),
-    };
+  const sendMessage = useCallback(async (userMessage: string, isRetry = false) => {
+    // Store for potential retry
+    if (!isRetry) {
+      lastMessageRef.current = userMessage;
+    }
 
-    setMessages((prev) => [...prev, userMsg]);
+    // Add user message (skip if retry)
+    if (!isRetry) {
+      const userMsg: Message = {
+        id: crypto.randomUUID(),
+        role: 'user',
+        content: userMessage,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, userMsg]);
+    }
+    
     setIsLoading(true);
 
     // Create placeholder for assistant message
@@ -77,11 +135,18 @@ export const useToolhouseAgent = () => {
         const chunk = decoder.decode(value, { stream: true });
         assistantContent += chunk;
 
+        // Parse for structured content
+        const parsed = parseStructuredContent(assistantContent);
+
         // Update the assistant message with new content
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === assistantMsgId
-              ? { ...msg, content: assistantContent }
+              ? { 
+                  ...msg, 
+                  content: parsed.text,
+                  structuredContent: parsed.structured,
+                }
               : msg
           )
         );
@@ -95,7 +160,7 @@ export const useToolhouseAgent = () => {
         {
           id: assistantMsgId,
           role: 'assistant',
-          content: `❌ **Error**: Failed to communicate with the AI agent. Please try again.\n\n\`${error instanceof Error ? error.message : 'Unknown error'}\``,
+          content: `⚠️ **Connection Error**: Failed to communicate with the AI agent. Please try again.\n\n\`${error instanceof Error ? error.message : 'Unknown error'}\``,
           timestamp: new Date(),
         },
       ]);
@@ -104,9 +169,16 @@ export const useToolhouseAgent = () => {
     }
   }, []);
 
+  const retryLastMessage = useCallback(() => {
+    if (lastMessageRef.current) {
+      sendMessage(lastMessageRef.current, true);
+    }
+  }, [sendMessage]);
+
   const clearMessages = useCallback(() => {
     setMessages([]);
     runIdRef.current = null;
+    lastMessageRef.current = null;
   }, []);
 
   return {
@@ -114,6 +186,7 @@ export const useToolhouseAgent = () => {
     isLoading,
     sendMessage,
     clearMessages,
+    retryLastMessage,
     hasRunId: !!runIdRef.current,
   };
 };
