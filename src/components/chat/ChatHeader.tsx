@@ -1,6 +1,13 @@
-import { HardDrive, Sparkles } from 'lucide-react';
+import { HardDrive, Sparkles, Gamepad2, Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-const ChatHeader = () => {
+interface ChatHeaderProps {
+  onOpenGames?: () => void;
+  onGoHome?: () => void;
+  showHomeButton?: boolean;
+}
+
+const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeaderProps) => {
   return (
     <header className="border-b border-border bg-card/80 backdrop-blur-sm px-4 py-3">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -25,12 +32,37 @@ const ChatHeader = () => {
           </div>
         </div>
 
-        {/* Status indicator */}
+        {/* Action buttons */}
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          <span className="text-[10px] text-muted-foreground font-pixel">
-            ONLINE
-          </span>
+          {showHomeButton && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onGoHome}
+              className="font-pixel text-[8px] hover:bg-accent/20 hover:text-accent gap-1"
+            >
+              <Home className="w-4 h-4" />
+              <span className="hidden sm:inline">HOME</span>
+            </Button>
+          )}
+          
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onOpenGames}
+            className="font-pixel text-[8px] hover:bg-secondary/20 hover:text-secondary gap-1 pulse-ring"
+          >
+            <Gamepad2 className="w-4 h-4 neon-flicker" />
+            <span className="hidden sm:inline">GAMES</span>
+          </Button>
+
+          {/* Status indicator */}
+          <div className="flex items-center gap-2 ml-2">
+            <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+            <span className="text-[10px] text-muted-foreground font-pixel hidden sm:inline">
+              ONLINE
+            </span>
+          </div>
         </div>
       </div>
     </header>

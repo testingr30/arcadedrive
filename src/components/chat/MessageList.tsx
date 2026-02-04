@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'react';
 import MessageBubble, { Message } from './MessageBubble';
 import LoadingIndicator from './LoadingIndicator';
-import { Folder, FileText, Table2, Trash2, Search, Shield } from 'lucide-react';
+import { Folder, FileText, Table2, Trash2, Search, Shield, Gamepad2 } from 'lucide-react';
 
 interface MessageListProps {
   messages: Message[];
   isLoading: boolean;
   onSendMessage?: (message: string) => void;
+  onOpenGames?: () => void;
 }
 
 const QUICK_ACTIONS = [
@@ -15,6 +16,7 @@ const QUICK_ACTIONS = [
   { icon: Table2, label: 'Create Sheet', message: 'Create a new Google Sheets spreadsheet' },
   { icon: Trash2, label: 'Organize', message: 'Help me organize my Google Drive files' },
   { icon: Search, label: 'Search', message: 'Search my Google Drive for files' },
+  { icon: Gamepad2, label: 'Play Game', message: null }, // Special handler for games
 ];
 
 const FIX_AUTH_MESSAGE = `You are an AI worker connected to Toolhouse AI. Your main task is to create and manage files in the user's Google Drive.
@@ -53,7 +55,7 @@ If an action fails with "Authentication required" or contains a structuredConten
    - Use emojis or icons (🔗, ✅, ⚠️) sparingly for clarity.
    - Always retry seamlessly after authorization without requiring the user to repeat their command.`;
 
-const MessageList = ({ messages, isLoading, onSendMessage }: MessageListProps) => {
+const MessageList = ({ messages, isLoading, onSendMessage, onOpenGames }: MessageListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -62,9 +64,11 @@ const MessageList = ({ messages, isLoading, onSendMessage }: MessageListProps) =
     }
   }, [messages, isLoading]);
 
-  const handleQuickAction = (message: string) => {
-    if (onSendMessage) {
-      onSendMessage(message);
+  const handleQuickAction = (action: typeof QUICK_ACTIONS[0]) => {
+    if (action.message === null && onOpenGames) {
+      onOpenGames();
+    } else if (action.message && onSendMessage) {
+      onSendMessage(action.message);
     }
   };
 
@@ -104,17 +108,23 @@ const MessageList = ({ messages, isLoading, onSendMessage }: MessageListProps) =
               {QUICK_ACTIONS.map((action, i) => (
                 <button
                   key={i}
-                  onClick={() => handleQuickAction(action.message)}
-                  className="group relative px-4 py-3 bg-muted/50 rounded-lg border-2 border-border text-sm text-foreground hover:border-accent hover:bg-accent/10 transition-all duration-200 hover:arcade-glow flex flex-col items-center gap-2"
+                  onClick={() => handleQuickAction(action)}
+                  className={`group relative px-4 py-3 rounded-lg border-2 text-sm text-foreground transition-all duration-200 flex flex-col items-center gap-2 arcade-button-press ${
+                    action.message === null 
+                      ? 'bg-secondary/20 border-secondary hover:bg-secondary/30 hover:arcade-glow-yellow' 
+                      : 'bg-muted/50 border-border hover:border-accent hover:bg-accent/10 hover:arcade-glow'
+                  }`}
                 >
-                  <action.icon className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
+                  <action.icon className={`w-5 h-5 group-hover:scale-110 transition-transform ${
+                    action.message === null ? 'text-secondary neon-flicker' : 'text-accent'
+                  }`} />
                   <span className="font-pixel text-[8px]">{action.label}</span>
                   {/* Pixel hover effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <div className="absolute top-0 left-0 w-2 h-2 bg-accent" />
-                    <div className="absolute top-0 right-0 w-2 h-2 bg-accent" />
-                    <div className="absolute bottom-0 left-0 w-2 h-2 bg-accent" />
-                    <div className="absolute bottom-0 right-0 w-2 h-2 bg-accent" />
+                    <div className={`absolute top-0 left-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
+                    <div className={`absolute top-0 right-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
+                    <div className={`absolute bottom-0 left-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
+                    <div className={`absolute bottom-0 right-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
                   </div>
                 </button>
               ))}
@@ -122,8 +132,8 @@ const MessageList = ({ messages, isLoading, onSendMessage }: MessageListProps) =
 
             {/* Fix Authentication button */}
             <button
-              onClick={() => handleQuickAction(FIX_AUTH_MESSAGE)}
-              className="w-full group relative px-4 py-3 bg-primary/20 rounded-lg border-2 border-primary text-sm text-foreground hover:bg-primary/30 transition-all duration-200 hover:arcade-glow-red flex items-center justify-center gap-3"
+              onClick={() => onSendMessage && onSendMessage(FIX_AUTH_MESSAGE)}
+              className="w-full group relative px-4 py-3 bg-primary/20 rounded-lg border-2 border-primary text-sm text-foreground hover:bg-primary/30 transition-all duration-200 hover:arcade-glow-red flex items-center justify-center gap-3 arcade-button-press"
             >
               <Shield className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
               <span className="font-pixel text-[10px] text-primary">FIX AUTHENTICATION</span>
