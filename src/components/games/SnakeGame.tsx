@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Pause } from 'lucide-react';
+import { useAudioContext } from '@/contexts/AudioContext';
+import { saveScore } from '@/hooks/useAudio';
 
 const GRID_SIZE = 15;
 const CELL_SIZE = 16;
@@ -18,6 +20,7 @@ const SnakeGame = () => {
   const [gameOver, setGameOver] = useState(false);
   const [highScore, setHighScore] = useState(0);
   const directionRef = useRef(direction);
+  const { playSound } = useAudioContext();
 
   const generateFood = useCallback((snakeBody: Position[]): Position => {
     let newFood: Position;
@@ -39,7 +42,8 @@ const SnakeGame = () => {
     setScore(0);
     setGameOver(false);
     setIsPlaying(false);
-  }, [generateFood]);
+    playSound('blip');
+  }, [generateFood, playSound]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!isPlaying) return;
@@ -95,7 +99,9 @@ const SnakeGame = () => {
         if (newHead.x < 0 || newHead.x >= GRID_SIZE || newHead.y < 0 || newHead.y >= GRID_SIZE) {
           setGameOver(true);
           setIsPlaying(false);
+          playSound('gameover');
           if (score > highScore) setHighScore(score);
+          saveScore('snake', score);
           return prevSnake;
         }
 
@@ -103,7 +109,9 @@ const SnakeGame = () => {
         if (prevSnake.some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
           setGameOver(true);
           setIsPlaying(false);
+          playSound('gameover');
           if (score > highScore) setHighScore(score);
+          saveScore('snake', score);
           return prevSnake;
         }
 
@@ -113,6 +121,7 @@ const SnakeGame = () => {
         if (newHead.x === food.x && newHead.y === food.y) {
           setScore(prev => prev + 10);
           setFood(generateFood(newSnake));
+          playSound('eat');
         } else {
           newSnake.pop();
         }
@@ -123,7 +132,7 @@ const SnakeGame = () => {
 
     const gameLoop = setInterval(moveSnake, INITIAL_SPEED);
     return () => clearInterval(gameLoop);
-  }, [isPlaying, gameOver, food, generateFood, score, highScore]);
+  }, [isPlaying, gameOver, food, generateFood, score, highScore, playSound]);
 
   return (
     <div className="flex flex-col items-center gap-4 p-4">
@@ -206,7 +215,10 @@ const SnakeGame = () => {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={() => {
+            playSound('blip');
+            setIsPlaying(!isPlaying);
+          }}
           disabled={gameOver}
           className="font-pixel text-[8px] border-accent hover:bg-accent/20"
         >

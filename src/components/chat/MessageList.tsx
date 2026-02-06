@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import MessageBubble, { Message } from './MessageBubble';
 import LoadingIndicator from './LoadingIndicator';
+import LeaderboardWidget from '@/components/LeaderboardWidget';
 import { Folder, FileText, Table2, Trash2, Search, Shield, Gamepad2 } from 'lucide-react';
 
 interface MessageListProps {
@@ -129,6 +130,9 @@ const MessageList = ({ messages, isLoading, onSendMessage, onOpenGames }: Messag
                 </button>
               ))}
             </div>
+
+            {/* Leaderboard Widget */}
+            <LeaderboardWidget className="mb-6" />
 
             {/* Fix Authentication button */}
             <button

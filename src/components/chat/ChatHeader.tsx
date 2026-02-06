@@ -1,5 +1,6 @@
-import { HardDrive, Sparkles, Gamepad2, Home } from 'lucide-react';
+import { HardDrive, Sparkles, Gamepad2, Home, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAudioContext } from '@/contexts/AudioContext';
 
 interface ChatHeaderProps {
   onOpenGames?: () => void;
@@ -8,6 +9,13 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeaderProps) => {
+  const { isMuted, toggleMute, playSound } = useAudioContext();
+
+  const handleMuteToggle = () => {
+    playSound('blip');
+    toggleMute();
+  };
+
   return (
     <header className="border-b border-border bg-card/80 backdrop-blur-sm px-4 py-3">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -45,6 +53,21 @@ const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeade
               <span className="hidden sm:inline">HOME</span>
             </Button>
           )}
+
+          {/* Mute toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleMuteToggle}
+            className="font-pixel text-[8px] hover:bg-muted gap-1"
+            title={isMuted ? 'Unmute' : 'Mute'}
+          >
+            {isMuted ? (
+              <VolumeX className="w-4 h-4 text-muted-foreground" />
+            ) : (
+              <Volume2 className="w-4 h-4 text-accent neon-flicker" />
+            )}
+          </Button>
           
           <Button
             variant="ghost"
