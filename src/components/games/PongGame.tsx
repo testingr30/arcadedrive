@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Pause } from 'lucide-react';
+import { useAudioContext } from '@/contexts/AudioContext';
+import { saveScore } from '@/hooks/useAudio';
 
 const CANVAS_WIDTH = 240;
 const CANVAS_HEIGHT = 160;
@@ -22,6 +24,7 @@ const PongGame = () => {
   const [winner, setWinner] = useState<'player' | 'ai' | null>(null);
   
   const keysPressed = useRef<Set<string>>(new Set());
+  const { playSound } = useAudioContext();
 
   const resetBall = useCallback((direction: number = 1) => {
     setBallPos({ x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 });
@@ -40,7 +43,8 @@ const PongGame = () => {
     setWinner(null);
     setIsPlaying(false);
     resetBall();
-  }, [resetBall]);
+    playSound('blip');
+  }, [resetBall, playSound]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     keysPressed.current.add(e.key);
@@ -104,6 +108,7 @@ const PongGame = () => {
           const hitPos = (newY - playerY) / PADDLE_HEIGHT;
           newVelY = (hitPos - 0.5) * 6;
           newX = PADDLE_WIDTH + 10;
+          playSound('paddle');
         }
 
         // AI paddle collision
@@ -116,6 +121,7 @@ const PongGame = () => {
           const hitPos = (newY - aiY) / PADDLE_HEIGHT;
           newVelY = (hitPos - 0.5) * 6;
           newX = CANVAS_WIDTH - PADDLE_WIDTH - 10 - BALL_SIZE;
+          playSound('paddle');
         }
 
         // Score
@@ -126,7 +132,10 @@ const PongGame = () => {
               setGameOver(true);
               setWinner('ai');
               setIsPlaying(false);
+              playSound('gameover');
+              saveScore('pong', playerScore);
             } else {
+              playSound('error');
               setTimeout(() => resetBall(-1), 500);
             }
             return newScore;
@@ -140,7 +149,10 @@ const PongGame = () => {
               setGameOver(true);
               setWinner('player');
               setIsPlaying(false);
+              playSound('success');
+              saveScore('pong', newScore);
             } else {
+              playSound('score');
               setTimeout(() => resetBall(1), 500);
             }
             return newScore;
@@ -157,7 +169,7 @@ const PongGame = () => {
     }, 1000 / 60);
 
     return () => clearInterval(gameLoop);
-  }, [isPlaying, gameOver, ballVel, playerY, aiY, ballPos.y, resetBall]);
+  }, [isPlaying, gameOver, ballVel, playerY, aiY, ballPos.y, resetBall, playSound, playerScore]);
 
   return (
     <div className="flex flex-col items-center gap-4 p-4">
@@ -243,7 +255,10 @@ const PongGame = () => {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={() => {
+            playSound('blip');
+            setIsPlaying(!isPlaying);
+          }}
           disabled={gameOver}
           className="font-pixel text-[8px] border-accent hover:bg-accent/20"
         >
