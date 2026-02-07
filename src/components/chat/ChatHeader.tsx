@@ -1,14 +1,16 @@
 import { HardDrive, Sparkles, Gamepad2, Home, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAudioContext } from '@/contexts/AudioContext';
+import AuthConnectButton from './AuthConnectButton';
 
 interface ChatHeaderProps {
   onOpenGames?: () => void;
   onGoHome?: () => void;
   showHomeButton?: boolean;
+  onSendMessage?: (msg: string) => void;
 }
 
-const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeaderProps) => {
+const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false, onSendMessage }: ChatHeaderProps) => {
   const { isMuted, toggleMute, playSound } = useAudioContext();
 
   const handleMuteToggle = () => {
@@ -28,7 +30,7 @@ const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeade
             {/* Pixel decoration */}
             <div className="absolute -top-1 -right-1 w-2 h-2 bg-secondary" />
           </div>
-          
+
           <div>
             <h1 className="font-pixel text-xs md:text-sm text-foreground">
               ARCADE AI
@@ -42,6 +44,10 @@ const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeade
 
         {/* Action buttons */}
         <div className="flex items-center gap-2">
+          {onSendMessage && (
+            <AuthConnectButton onSendMessage={onSendMessage} />
+          )}
+
           {showHomeButton && (
             <Button
               variant="ghost"
@@ -68,7 +74,7 @@ const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeade
               <Volume2 className="w-4 h-4 text-accent neon-flicker" />
             )}
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -93,3 +99,4 @@ const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false }: ChatHeade
 };
 
 export default ChatHeader;
+

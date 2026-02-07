@@ -8,93 +8,95 @@
 
 @layer base {
   :root {
-    /* Arcade Deep Blue Background */
-    --background: 215 60% 15%;
-    --foreground: 45 100% 95%;
+    /* Neon Cyberpunk Theme - HSL Values */
 
-    /* Card surfaces - slightly lighter blue */
-    --card: 215 55% 20%;
-    --card-foreground: 45 100% 95%;
+    /* Background: Deep Violet / Black */
+    --background: 260 50% 10%;
+    --foreground: 280 100% 95%;
+
+    /* Card surfaces: Slightly lighter violet */
+    --card: 260 40% 15%;
+    --card-foreground: 280 100% 95%;
 
     /* Popover */
-    --popover: 215 55% 18%;
-    --popover-foreground: 45 100% 95%;
+    --popover: 260 40% 13%;
+    --popover-foreground: 280 100% 95%;
 
-    /* Primary - Arcade Red */
-    --primary: 0 75% 55%;
+    /* Primary: Neon Magenta/Pink */
+    --primary: 320 100% 55%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Arcade Yellow/Gold */
-    --secondary: 45 100% 60%;
-    --secondary-foreground: 215 60% 15%;
+    /* Secondary: Neon Cyan */
+    --secondary: 190 100% 50%;
+    --secondary-foreground: 260 50% 10%;
 
-    /* Muted - Darker blue for subtle elements */
-    --muted: 215 50% 25%;
-    --muted-foreground: 215 30% 70%;
+    /* Muted: Deep Purple */
+    --muted: 260 30% 25%;
+    --muted-foreground: 260 20% 70%;
 
-    /* Accent - Cyan/Teal glow */
-    --accent: 180 70% 50%;
-    --accent-foreground: 215 60% 10%;
+    /* Accent: Electric Purple */
+    --accent: 280 100% 60%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Destructive */
-    --destructive: 0 84% 60%;
+    /* Destructive: Bright Red */
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
 
     /* Borders and inputs */
-    --border: 215 40% 30%;
-    --input: 215 45% 25%;
-    --ring: 180 70% 50%;
+    --border: 260 30% 30%;
+    --input: 260 30% 20%;
+    --ring: 320 100% 55%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     /* Chat specific */
-    --chat-user: 215 50% 28%;
-    --chat-assistant: 215 55% 22%;
-    --chat-glow: 180 100% 50%;
+    --chat-user: 260 40% 25%;
+    --chat-assistant: 260 40% 18%;
+    --chat-glow: 320 100% 50%;
 
     /* Stars */
-    --star-color: 45 100% 70%;
+    --star-color: 0 0% 100%;
 
     /* Sidebar */
-    --sidebar-background: 215 60% 12%;
-    --sidebar-foreground: 45 100% 90%;
-    --sidebar-primary: 0 75% 55%;
+    --sidebar-background: 260 50% 8%;
+    --sidebar-foreground: 280 100% 90%;
+    --sidebar-primary: 320 100% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 50% 25%;
-    --sidebar-accent-foreground: 45 100% 95%;
-    --sidebar-border: 215 40% 25%;
-    --sidebar-ring: 180 70% 50%;
+    --sidebar-accent: 260 30% 20%;
+    --sidebar-accent-foreground: 280 100% 95%;
+    --sidebar-border: 260 30% 25%;
+    --sidebar-ring: 320 100% 55%;
   }
 
   .dark {
-    /* Keep same as root for consistent arcade theme */
-    --background: 215 60% 15%;
-    --foreground: 45 100% 95%;
-    --card: 215 55% 20%;
-    --card-foreground: 45 100% 95%;
-    --popover: 215 55% 18%;
-    --popover-foreground: 45 100% 95%;
-    --primary: 0 75% 55%;
+    /* Same scale for dark mode consistency */
+    --background: 260 50% 10%;
+    --foreground: 280 100% 95%;
+    --card: 260 40% 15%;
+    --card-foreground: 280 100% 95%;
+    --popover: 260 40% 13%;
+    --popover-foreground: 280 100% 95%;
+    --primary: 320 100% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 45 100% 60%;
-    --secondary-foreground: 215 60% 15%;
-    --muted: 215 50% 25%;
-    --muted-foreground: 215 30% 70%;
-    --accent: 180 70% 50%;
-    --accent-foreground: 215 60% 10%;
-    --destructive: 0 84% 60%;
+    --secondary: 190 100% 50%;
+    --secondary-foreground: 260 50% 10%;
+    --muted: 260 30% 25%;
+    --muted-foreground: 260 20% 70%;
+    --accent: 280 100% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 215 40% 30%;
-    --input: 215 45% 25%;
-    --ring: 180 70% 50%;
-    --sidebar-background: 215 60% 12%;
-    --sidebar-foreground: 45 100% 90%;
-    --sidebar-primary: 0 75% 55%;
+    --border: 260 30% 30%;
+    --input: 260 30% 20%;
+    --ring: 320 100% 55%;
+    --sidebar-background: 260 50% 8%;
+    --sidebar-foreground: 280 100% 90%;
+    --sidebar-primary: 320 100% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 50% 25%;
-    --sidebar-accent-foreground: 45 100% 95%;
-    --sidebar-border: 215 40% 25%;
-    --sidebar-ring: 180 70% 50%;
+    --sidebar-accent: 260 30% 20%;
+    --sidebar-accent-foreground: 280 100% 95%;
+    --sidebar-border: 260 30% 25%;
+    --sidebar-ring: 320 100% 55%;
   }
 }
 
@@ -106,6 +108,25 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+
+    /* Custom Neon Cursor */
+    cursor: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 2L12 28L16 18L26 14L2 2Z' fill='rgba(15, 23, 42, 0.8)' stroke='%2300ffff' stroke-width='2'/%3E%3Ccircle cx='2' cy='2' r='2' fill='%23ff00ff'/%3E%3C/svg%3E"), auto;
+  }
+
+  /* Neon Selection */
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: white;
+  }
+
+  /* Interactive Elements Cursor */
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    cursor: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 2L10 12L2 12L2 20L10 20L10 30L18 30L18 20L26 20L26 12L18 12L18 2L10 2Z' fill='rgba(255, 0, 255, 0.2)' stroke='%23ff00ff' stroke-width='2'/%3E%3Ccircle cx='14' cy='16' r='2' fill='%2300ffff'/%3E%3C/svg%3E") 14 16, pointer;
   }
 
   .font-pixel {
@@ -114,30 +135,31 @@
 }
 
 @layer components {
+
   /* Arcade glow effects */
   .arcade-glow {
-    box-shadow: 
+    box-shadow:
       0 0 5px hsl(var(--accent)),
       0 0 20px hsl(var(--accent) / 0.4),
       0 0 35px hsl(var(--accent) / 0.2);
   }
 
   .arcade-glow-red {
-    box-shadow: 
+    box-shadow:
       0 0 5px hsl(var(--primary)),
       0 0 20px hsl(var(--primary) / 0.4),
       0 0 35px hsl(var(--primary) / 0.2);
   }
 
   .arcade-glow-yellow {
-    box-shadow: 
+    box-shadow:
       0 0 5px hsl(var(--secondary)),
       0 0 20px hsl(var(--secondary) / 0.4);
   }
 
   /* Enhanced stars background with multiple layers */
   .stars-bg {
-    background-image: 
+    background-image:
       radial-gradient(2px 2px at 20px 30px, hsl(var(--star-color)), transparent),
       radial-gradient(2px 2px at 40px 70px, hsl(var(--star-color)), transparent),
       radial-gradient(1px 1px at 90px 40px, hsl(var(--star-color)), transparent),
@@ -156,13 +178,20 @@
   }
 
   @keyframes twinkle {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.6;
+    }
   }
 
   /* Grid pattern overlay */
   .bg-grid-pattern {
-    background-image: 
+    background-image:
       linear-gradient(hsl(var(--accent) / 0.1) 1px, transparent 1px),
       linear-gradient(90deg, hsl(var(--accent) / 0.1) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -177,13 +206,11 @@
   /* Pixel border effect */
   .pixel-border {
     border: 4px solid;
-    border-image: 
-      linear-gradient(
-        45deg, 
-        hsl(var(--primary)) 25%, 
+    border-image:
+      linear-gradient(45deg,
+        hsl(var(--primary)) 25%,
         hsl(var(--secondary)) 50%,
-        hsl(var(--accent)) 75%
-      ) 1;
+        hsl(var(--accent)) 75%) 1;
   }
 
   /* Chat message animations */
@@ -196,6 +223,7 @@
       opacity: 0;
       transform: translateY(10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -207,14 +235,26 @@
     animation: loadingBounce 1.4s ease-in-out infinite both;
   }
 
-  .loading-dot:nth-child(1) { animation-delay: -0.32s; }
-  .loading-dot:nth-child(2) { animation-delay: -0.16s; }
-  .loading-dot:nth-child(3) { animation-delay: 0s; }
+  .loading-dot:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+
+  .loading-dot:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+
+  .loading-dot:nth-child(3) {
+    animation-delay: 0s;
+  }
 
   @keyframes loadingBounce {
-    0%, 80%, 100% {
+
+    0%,
+    80%,
+    100% {
       transform: scale(0);
     }
+
     40% {
       transform: scale(1);
     }
@@ -225,20 +265,23 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(0 0% 0% / 0.05) 2px,
-      hsl(0 0% 0% / 0.05) 4px
-    );
+    background: repeating-linear-gradient(0deg,
+        transparent,
+        transparent 2px,
+        hsl(0 0% 0% / 0.05) 2px,
+        hsl(0 0% 0% / 0.05) 4px);
     pointer-events: none;
     animation: scanlineMove 8s linear infinite;
   }
 
   @keyframes scanlineMove {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(4px); }
+    0% {
+      transform: translateY(0);
+    }
+
+    100% {
+      transform: translateY(4px);
+    }
   }
 
   /* CRT flicker effect */
@@ -247,8 +290,15 @@
   }
 
   @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.98; }
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.98;
+    }
   }
 
   /* Arcade scrollbar styling */
@@ -274,7 +324,7 @@
 
   /* Glowing text effect */
   .text-glow {
-    text-shadow: 
+    text-shadow:
       0 0 5px currentColor,
       0 0 10px currentColor,
       0 0 20px currentColor;
@@ -315,21 +365,54 @@
   }
 
   @keyframes glitch {
-    2%, 64% { transform: translate(2px, 0) skew(0deg); }
-    4%, 60% { transform: translate(-2px, 0) skew(0deg); }
-    62% { transform: translate(0, 0) skew(5deg); }
+
+    2%,
+    64% {
+      transform: translate(2px, 0) skew(0deg);
+    }
+
+    4%,
+    60% {
+      transform: translate(-2px, 0) skew(0deg);
+    }
+
+    62% {
+      transform: translate(0, 0) skew(5deg);
+    }
   }
 
   @keyframes glitchTop {
-    2%, 64% { transform: translate(2px, -2px); }
-    4%, 60% { transform: translate(-2px, 2px); }
-    62% { transform: translate(13px, -1px) skew(-13deg); }
+
+    2%,
+    64% {
+      transform: translate(2px, -2px);
+    }
+
+    4%,
+    60% {
+      transform: translate(-2px, 2px);
+    }
+
+    62% {
+      transform: translate(13px, -1px) skew(-13deg);
+    }
   }
 
   @keyframes glitchBottom {
-    2%, 64% { transform: translate(-2px, 0); }
-    4%, 60% { transform: translate(-2px, 0); }
-    62% { transform: translate(-22px, 5px) skew(21deg); }
+
+    2%,
+    64% {
+      transform: translate(-2px, 0);
+    }
+
+    4%,
+    60% {
+      transform: translate(-2px, 0);
+    }
+
+    62% {
+      transform: translate(-22px, 5px) skew(21deg);
+    }
   }
 
   /* NEW: Neon flicker effect */
@@ -338,15 +421,26 @@
   }
 
   @keyframes neonFlicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      text-shadow: 
+
+    0%,
+    19%,
+    21%,
+    23%,
+    25%,
+    54%,
+    56%,
+    100% {
+      text-shadow:
         0 0 5px hsl(var(--accent)),
         0 0 10px hsl(var(--accent)),
         0 0 20px hsl(var(--accent)),
         0 0 40px hsl(var(--accent));
       opacity: 1;
     }
-    20%, 24%, 55% {
+
+    20%,
+    24%,
+    55% {
       text-shadow: none;
       opacity: 0.8;
     }
@@ -358,8 +452,15 @@
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
   }
 
   /* NEW: Pulse ring animation */
@@ -381,6 +482,7 @@
       transform: scale(1);
       opacity: 1;
     }
+
     100% {
       transform: scale(1.3);
       opacity: 0;
@@ -389,19 +491,23 @@
 
   /* NEW: Rainbow border animation */
   .rainbow-border {
-    background: linear-gradient(90deg, 
-      hsl(var(--primary)), 
-      hsl(var(--secondary)), 
-      hsl(var(--accent)), 
-      hsl(var(--primary))
-    );
+    background: linear-gradient(90deg,
+        hsl(var(--primary)),
+        hsl(var(--secondary)),
+        hsl(var(--accent)),
+        hsl(var(--primary)));
     background-size: 300% 100%;
     animation: rainbowMove 3s linear infinite;
   }
 
   @keyframes rainbowMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 300% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+
+    100% {
+      background-position: 300% 50%;
+    }
   }
 
   /* NEW: Shake animation */
@@ -410,9 +516,26 @@
   }
 
   @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(5px);
+    }
   }
 
   /* NEW: Scale in animation */
@@ -425,6 +548,7 @@
       opacity: 0;
       transform: scale(0.9);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
@@ -436,19 +560,31 @@
     overflow: hidden;
     border-right: 2px solid hsl(var(--accent));
     white-space: nowrap;
-    animation: 
+    animation:
       typing 2s steps(20, end),
       blinkCaret 0.75s step-end infinite;
   }
 
   @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
+    from {
+      width: 0;
+    }
+
+    to {
+      width: 100%;
+    }
   }
 
   @keyframes blinkCaret {
-    from, to { border-color: transparent; }
-    50% { border-color: hsl(var(--accent)); }
+
+    from,
+    to {
+      border-color: transparent;
+    }
+
+    50% {
+      border-color: hsl(var(--accent));
+    }
   }
 
   /* NEW: Rotate animation */
@@ -457,8 +593,13 @@
   }
 
   @keyframes spinSlow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   /* NEW: Bounce in animation */
@@ -471,15 +612,102 @@
       opacity: 0;
       transform: scale(0.3);
     }
+
     50% {
       opacity: 1;
       transform: scale(1.05);
     }
+
     70% {
       transform: scale(0.9);
     }
+
     100% {
       transform: scale(1);
+    }
+  }
+
+  /* NEW: Global Hover Glow */
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.6);
+    transform: translateY(-2px);
+    border-color: hsl(var(--primary));
+  }
+
+  .hover-glow-cyan {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow-cyan:hover {
+    box-shadow: 0 0 15px hsl(var(--secondary) / 0.6);
+    transform: translateY(-2px);
+    border-color: hsl(var(--secondary));
+  }
+
+  /* NEW: Retro Synthwave Sun */
+  .retro-sun {
+    background: linear-gradient(to bottom, #ffd700 0%, #ff00de 50%, #9900ff 100%);
+    box-shadow: 0 0 50px #ff00de;
+    mask-image: linear-gradient(to bottom, black 60%, transparent 60%, transparent 62%, black 62%, black 65%, transparent 65%, transparent 68%, black 68%, black 72%, transparent 72%, transparent 76%, black 76%, black 82%, transparent 82%, transparent 88%, black 88%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 60%, transparent 62%, black 62%, black 65%, transparent 65%, transparent 68%, black 68%, black 72%, transparent 72%, transparent 76%, black 76%, black 82%, transparent 82%, transparent 88%, black 88%);
+  }
+
+  /* NEW: 3D Grid Floor */
+  .perspective-grid {
+    perspective: 100vh;
+    transform-style: preserve-3d;
+  }
+
+  .moving-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--accent) / 0.3) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--accent) / 0.3) 1px, transparent 1px);
+    background-size: 40px 40px;
+    transform: rotateX(60deg);
+    animation: gridMove 2s linear infinite;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
+  }
+
+  @keyframes gridMove {
+    from {
+      background-position: 0 0;
+    }
+
+    to {
+      background-position: 0 40px;
+    }
+  }
+
+  /* NEW: Floating Shapes */
+  .floating-shape {
+    position: absolute;
+    opacity: 0.3;
+    border: 1px solid hsl(var(--secondary));
+    box-shadow: 0 0 10px hsl(var(--secondary) / 0.2);
+    animation: floatShape 10s linear infinite;
+  }
+
+  @keyframes floatShape {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+      opacity: 0;
+    }
+
+    20% {
+      opacity: 0.3;
+    }
+
+    80% {
+      opacity: 0.3;
+    }
+
+    100% {
+      transform: translate(0, -100px) rotate(360deg);
+      opacity: 0;
     }
   }
 }

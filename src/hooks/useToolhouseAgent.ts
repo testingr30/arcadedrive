@@ -37,7 +37,7 @@ const parseStructuredContent = (content: string): { text: string; structured?: S
   ];
 
   const needsAuth = authPatterns.some((pattern) => pattern.test(content));
-  
+
   // Look for URL patterns that might be auth links
   const urlMatch = content.match(/https:\/\/api\.toolhouse\.ai\/public\/integrations[^\s"')]+/);
   if (needsAuth && urlMatch) {
@@ -56,7 +56,7 @@ const parseStructuredContent = (content: string): { text: string; structured?: S
 export const useToolhouseAgent = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const runIdRef = useRef<string | null>(null);
+  const runIdRef = useRef<string | null>(localStorage.getItem('toolhouse_run_id'));
 
   const sendMessage = useCallback(async (userMessage: string) => {
     // Add user message
@@ -97,6 +97,7 @@ export const useToolhouseAgent = () => {
       const newRunId = response.headers.get('X-Toolhouse-Run-ID');
       if (newRunId) {
         runIdRef.current = newRunId;
+        localStorage.setItem('toolhouse_run_id', newRunId);
       }
 
       // Handle streaming response
@@ -120,7 +121,7 @@ export const useToolhouseAgent = () => {
 
       while (true) {
         const { done, value } = await reader.read();
-        
+
         if (done) break;
 
         const chunk = decoder.decode(value, { stream: true });
@@ -133,18 +134,18 @@ export const useToolhouseAgent = () => {
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === assistantMsgId
-              ? { 
-                  ...msg, 
-                  content: parsed.text,
-                  structuredContent: parsed.structured,
-                }
+              ? {
+                ...msg,
+                content: parsed.text,
+                structuredContent: parsed.structured,
+              }
               : msg
           )
         );
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      
+
       // Add error message
       setMessages((prev) => [
         ...prev,
@@ -162,7 +163,8 @@ export const useToolhouseAgent = () => {
 
   const clearMessages = useCallback(() => {
     setMessages([]);
-    runIdRef.current = null;
+    // runIdRef.current = null; // Don't clear runId to persist session
+    // localStorage.removeItem('toolhouse_run_id'); // Optional: clear if hard reset needed
   }, []);
 
   return {

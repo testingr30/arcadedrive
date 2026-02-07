@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SnakeGame from './SnakeGame';
 import PongGame from './PongGame';
+import MemoryGame from './MemoryGame';
 
 interface GamesPanelProps {
   isOpen: boolean;
@@ -18,11 +19,11 @@ const GamesPanel = ({ isOpen, onClose }: GamesPanelProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-background/80 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Panel */}
       <div className="relative bg-card border-4 border-accent arcade-glow rounded-lg max-w-md w-full max-h-[90vh] overflow-hidden animate-scale-in">
         {/* Header */}
@@ -43,27 +44,37 @@ const GamesPanel = ({ isOpen, onClose }: GamesPanelProps) => {
 
         {/* Game tabs */}
         <Tabs value={activeGame} onValueChange={setActiveGame} className="p-4">
-          <TabsList className="grid grid-cols-2 gap-2 bg-muted/50 p-1">
-            <TabsTrigger 
-              value="snake" 
+          <TabsList className="grid grid-cols-3 gap-2 bg-muted/50 p-1">
+            <TabsTrigger
+              value="snake"
               className="font-pixel text-[8px] data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
             >
               🐍 SNAKE
             </TabsTrigger>
-            <TabsTrigger 
-              value="pong" 
+            <TabsTrigger
+              value="pong"
               className="font-pixel text-[8px] data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
             >
               🏓 PONG
             </TabsTrigger>
+            <TabsTrigger
+              value="memory"
+              className="font-pixel text-[8px] data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+            >
+              🧠 MEMORY
+            </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="snake" className="mt-4">
             <SnakeGame />
           </TabsContent>
-          
+
           <TabsContent value="pong" className="mt-4">
             <PongGame />
+          </TabsContent>
+
+          <TabsContent value="memory" className="mt-4">
+            <MemoryGame />
           </TabsContent>
         </Tabs>
 
@@ -78,3 +89,4 @@ const GamesPanel = ({ isOpen, onClose }: GamesPanelProps) => {
 };
 
 export default GamesPanel;
+

@@ -17,27 +17,37 @@ const ChatInterface = () => {
     <div className="flex flex-col h-screen relative overflow-hidden">
       {/* Animated stars background */}
       <div className="absolute inset-0 stars-bg pointer-events-none" />
-      
-      {/* Grid overlay for extra arcade feel */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none" />
-      
-      {/* Scanline effect overlay */}
-      <div className="absolute inset-0 scanlines pointer-events-none" />
+
+      {/* NEW: Retro Sun */}
+      <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full retro-sun opacity-50 pointer-events-none blur-sm" />
+
+      {/* NEW: 3D Grid Floor */}
+      <div className="absolute inset-x-0 bottom-0 h-1/2 perspective-grid pointer-events-none overflow-hidden">
+        <div className="absolute -inset-[100%] moving-grid" />
+      </div>
+
+      {/* NEW: Floating Shapes */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="floating-shape w-12 h-12 left-[10%] top-[80%]" style={{ animationDelay: '0s' }} />
+        <div className="floating-shape w-8 h-8 left-[80%] top-[70%] border-primary text-primary" style={{ animationDelay: '2s', borderRadius: '50%' }} />
+        <div className="floating-shape w-16 h-16 left-[20%] top-[60%] border-accent text-accent" style={{ animationDelay: '4s', transform: 'rotate(45deg)' }} />
+      </div>
 
       {/* Vignette effect */}
       <div className="absolute inset-0 bg-radial-vignette pointer-events-none" />
 
       {/* Main content */}
       <div className="relative z-10 flex flex-col h-full">
-        <ChatHeader 
-          onOpenGames={() => setIsGamesOpen(true)} 
+        <ChatHeader
+          onOpenGames={() => setIsGamesOpen(true)}
           onGoHome={handleGoHome}
           showHomeButton={messages.length > 0}
+          onSendMessage={sendMessage}
         />
-        <MessageList 
-          messages={messages} 
-          isLoading={isLoading} 
-          onSendMessage={sendMessage} 
+        <MessageList
+          messages={messages}
+          isLoading={isLoading}
+          onSendMessage={sendMessage}
           onOpenGames={() => setIsGamesOpen(true)}
         />
         <ChatInput onSendMessage={sendMessage} isLoading={isLoading} />

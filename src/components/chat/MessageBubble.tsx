@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 import { User, Bot } from 'lucide-react';
@@ -19,6 +20,30 @@ interface MessageBubbleProps {
 const MessageBubble = ({ message }: MessageBubbleProps) => {
   const isUser = message.role === 'user';
   const hasAuthContent = message.structuredContent?.url && message.structuredContent?.integration;
+
+  // Typewriter effect state
+  const [displayedContent, setDisplayedContent] = useState(isUser ? message.content : '');
+  const [isTyping, setIsTyping] = useState(!isUser);
+
+  useEffect(() => {
+    if (isUser || !isTyping) {
+      setDisplayedContent(message.content);
+      return;
+    }
+
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      if (currentIndex >= message.content.length) {
+        clearInterval(interval);
+        setIsTyping(false);
+        return;
+      }
+      setDisplayedContent(prev => message.content.slice(0, currentIndex + 1));
+      currentIndex++;
+    }, 15); // Typing speed
+
+    return () => clearInterval(interval);
+  }, [message.content, isUser, isTyping]);
 
   return (
     <div
@@ -56,7 +81,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
             })}
           </span>
         </div>
-        
+
         <div className="prose prose-invert prose-sm max-w-none">
           <ReactMarkdown
             components={{
@@ -136,7 +161,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
               ),
             }}
           >
-            {message.content}
+            {displayedContent}
           </ReactMarkdown>
 
           {/* Auth Connect Button */}
