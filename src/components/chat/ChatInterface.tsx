@@ -5,15 +5,11 @@ import ChatInput from './ChatInput';
 import GamesPanel from '../games/GamesPanel';
 import ChatHistoryPanel, { saveChatSession, getSessionMessages } from './ChatHistoryPanel';
 import { useToolhouseAgent } from '@/hooks/useToolhouseAgent';
-import { useGlobalClickSound } from '@/hooks/useGlobalClickSound';
 
 const ChatInterface = () => {
   const { messages, isLoading, sendMessage, clearMessages, setMessages } = useToolhouseAgent();
   const [isGamesOpen, setIsGamesOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-
-  // Enable global click sounds
-  useGlobalClickSound();
 
   // Auto-save chat sessions when conversation changes
   useEffect(() => {

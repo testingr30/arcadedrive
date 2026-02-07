@@ -192,84 +192,91 @@ export const useAudio = () => {
     const { ctx, gainNode } = audioRef.current;
     if (!ctx || !gainNode || isMuted) return;
 
-    const osc = ctx.createOscillator();
-    const noteGain = ctx.createGain();
+    try {
+      const osc = ctx.createOscillator();
+      const noteGain = ctx.createGain();
 
-    osc.connect(noteGain);
-    noteGain.connect(gainNode);
+      osc.connect(noteGain);
+      noteGain.connect(gainNode);
 
-    switch (type) {
-      case 'blip':
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(440, ctx.currentTime);
-        noteGain.gain.setValueAtTime(0.2, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        osc.stop(ctx.currentTime + 0.1);
-        break;
-      case 'success':
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(523, ctx.currentTime);
-        osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
-        osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
-        noteGain.gain.setValueAtTime(0.2, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-        osc.stop(ctx.currentTime + 0.3);
-        break;
-      case 'error':
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.3);
-        noteGain.gain.setValueAtTime(0.2, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-        osc.stop(ctx.currentTime + 0.3);
-        break;
-      case 'gameover':
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(294, ctx.currentTime);
-        osc.frequency.setValueAtTime(262, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(196, ctx.currentTime + 0.3);
-        osc.frequency.setValueAtTime(147, ctx.currentTime + 0.45);
-        noteGain.gain.setValueAtTime(0.25, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
-        osc.stop(ctx.currentTime + 0.6);
-        break;
-      case 'eat':
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(600, ctx.currentTime);
-        osc.frequency.setValueAtTime(800, ctx.currentTime + 0.05);
-        noteGain.gain.setValueAtTime(0.15, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        osc.stop(ctx.currentTime + 0.1);
-        break;
-      case 'paddle':
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(350, ctx.currentTime);
-        noteGain.gain.setValueAtTime(0.15, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
-        osc.stop(ctx.currentTime + 0.08);
-        break;
-      case 'score':
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.frequency.setValueAtTime(1047, ctx.currentTime + 0.1);
-        noteGain.gain.setValueAtTime(0.2, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-        osc.stop(ctx.currentTime + 0.2);
-        break;
-      case 'click':
-        // Simulating a mechanical keyboard switch (Blue/Green switch click)
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(1200, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.03);
+      const t = ctx.currentTime;
+      let duration = 0.1;
 
-        noteGain.gain.setValueAtTime(0.5, ctx.currentTime);
-        noteGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03); // Super short tail
+      switch (type) {
+        case 'blip':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(440, t);
+          noteGain.gain.setValueAtTime(0.2, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+          duration = 0.1;
+          break;
+        case 'success':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(523, t);
+          osc.frequency.setValueAtTime(659, t + 0.1);
+          osc.frequency.setValueAtTime(784, t + 0.2);
+          noteGain.gain.setValueAtTime(0.2, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+          duration = 0.3;
+          break;
+        case 'error':
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(150, t);
+          osc.frequency.exponentialRampToValueAtTime(50, t + 0.3);
+          noteGain.gain.setValueAtTime(0.2, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+          duration = 0.3;
+          break;
+        case 'gameover':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(294, t);
+          osc.frequency.setValueAtTime(262, t + 0.15);
+          osc.frequency.setValueAtTime(196, t + 0.3);
+          osc.frequency.setValueAtTime(147, t + 0.45);
+          noteGain.gain.setValueAtTime(0.25, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, t + 0.6);
+          duration = 0.6;
+          break;
+        case 'eat':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(600, t);
+          osc.frequency.setValueAtTime(800, t + 0.05);
+          noteGain.gain.setValueAtTime(0.15, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+          duration = 0.1;
+          break;
+        case 'paddle':
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(350, t);
+          noteGain.gain.setValueAtTime(0.15, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+          duration = 0.08;
+          break;
+        case 'score':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(880, t);
+          osc.frequency.setValueAtTime(1047, t + 0.1);
+          noteGain.gain.setValueAtTime(0.2, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+          duration = 0.2;
+          break;
+        case 'click':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(1200, t);
+          osc.frequency.exponentialRampToValueAtTime(400, t + 0.03);
+          noteGain.gain.setValueAtTime(0.5, t);
+          noteGain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+          duration = 0.04;
+          break;
+      }
 
-        osc.stop(ctx.currentTime + 0.04);
-        break;
+      // Start BEFORE stop to avoid InvalidStateError
+      osc.start(t);
+      osc.stop(t + duration);
+    } catch (e) {
+      // Silently ignore audio errors - don't break the app
+      console.warn('Audio playback error:', e);
     }
-
-    osc.start();
   }, [isMuted]);
 
   const toggleMute = useCallback(() => {

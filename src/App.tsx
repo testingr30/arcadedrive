@@ -51,28 +51,25 @@ const App = () => {
 
 // Helper component to handle global audio events since it needs to be inside AudioProvider
 const GlobalAudioHandler = () => {
-  const { playSound } = useAudioContext();
+  const { playSound, hasInteracted } = useAudioContext();
 
   React.useEffect(() => {
+    // Only attach listeners if user has interacted (audio is ready)
+    if (!hasInteracted) return;
+
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.matches('button, a, [role="button"], input, select, textarea')) {
+      if (target.matches('button, a, [role="button"]')) {
         playSound('blip');
       }
     };
 
-    const handleClick = () => {
-      playSound('click');
-    };
-
     window.addEventListener('mouseover', handleMouseOver);
-    window.addEventListener('click', handleClick, true); // Capture phase to hear all clicks
 
     return () => {
       window.removeEventListener('mouseover', handleMouseOver);
-      window.removeEventListener('click', handleClick, true);
     };
-  }, [playSound]);
+  }, [playSound, hasInteracted]);
 
   return null;
 };
