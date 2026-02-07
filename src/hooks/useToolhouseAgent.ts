@@ -169,6 +169,7 @@ export const useToolhouseAgent = () => {
 
   return {
     messages,
+    setMessages,
     isLoading,
     sendMessage,
     clearMessages,

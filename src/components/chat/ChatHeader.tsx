@@ -1,16 +1,17 @@
-import { HardDrive, Sparkles, Gamepad2, Home, Volume2, VolumeX } from 'lucide-react';
+import { HardDrive, Sparkles, Gamepad2, Home, Volume2, VolumeX, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAudioContext } from '@/contexts/AudioContext';
 import AuthConnectButton from './AuthConnectButton';
 
-interface ChatHeaderProps {
+export interface ChatHeaderProps {
   onOpenGames?: () => void;
+  onOpenHistory?: () => void;
   onGoHome?: () => void;
   showHomeButton?: boolean;
   onSendMessage?: (msg: string) => void;
 }
 
-const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false, onSendMessage }: ChatHeaderProps) => {
+const ChatHeader = ({ onOpenGames, onOpenHistory, onGoHome, showHomeButton = false, onSendMessage }: ChatHeaderProps) => {
   const { isMuted, toggleMute, playSound } = useAudioContext();
 
   const handleMuteToggle = () => {
@@ -73,6 +74,17 @@ const ChatHeader = ({ onOpenGames, onGoHome, showHomeButton = false, onSendMessa
             ) : (
               <Volume2 className="w-4 h-4 text-accent neon-flicker" />
             )}
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onOpenHistory}
+            className="font-pixel text-[8px] hover:bg-accent/20 hover:text-accent gap-1"
+            title="Chat History"
+          >
+            <History className="w-4 h-4" />
+            <span className="hidden sm:inline">HISTORY</span>
           </Button>
 
           <Button

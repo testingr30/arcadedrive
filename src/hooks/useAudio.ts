@@ -132,8 +132,8 @@ export const useAudio = () => {
     gainNode.connect(ctx.destination);
     bgmGain.connect(ctx.destination);
 
-    gainNode.gain.setValueAtTime(isMuted ? 0 : 0.3, ctx.currentTime);
-    bgmGain.gain.setValueAtTime(isMuted ? 0 : 0.15, ctx.currentTime);
+    gainNode.gain.setValueAtTime(isMuted ? 0 : 0.5, ctx.currentTime);
+    bgmGain.gain.setValueAtTime(isMuted ? 0 : 0.35, ctx.currentTime);
 
     audioRef.current = { ctx, gainNode, bgmGain };
     setHasInteracted(true);
@@ -166,8 +166,8 @@ export const useAudio = () => {
     const { ctx, gainNode, bgmGain } = audioRef.current;
     if (!ctx || !gainNode || !bgmGain) return;
 
-    gainNode.gain.setValueAtTime(isMuted ? 0 : 0.3, ctx.currentTime);
-    bgmGain.gain.setValueAtTime(isMuted ? 0 : 0.15, ctx.currentTime);
+    gainNode.gain.setValueAtTime(isMuted ? 0 : 0.5, ctx.currentTime);
+    bgmGain.gain.setValueAtTime(isMuted ? 0 : 0.35, ctx.currentTime);
 
     // Toggle background music
     if (isMuted) {
