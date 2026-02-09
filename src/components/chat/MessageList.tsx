@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import MessageBubble, { Message } from './MessageBubble';
 import LoadingIndicator from './LoadingIndicator';
 import LeaderboardWidget from '@/components/LeaderboardWidget';
-import { Folder, FileText, Table2, Trash2, Search, Shield, Gamepad2 } from 'lucide-react';
+import { Folder, FileText, Table2, Trash2, Search, Shield, Gamepad2, Shuffle, Edit, Copy, FolderUp, FileArchive, Star } from 'lucide-react';
 
 interface MessageListProps {
   messages: Message[];
@@ -12,12 +12,18 @@ interface MessageListProps {
 }
 
 const QUICK_ACTIONS = [
-  { icon: Folder, label: 'List Files', message: 'List all my Google Drive files' },
-  { icon: FileText, label: 'Create Doc', message: 'Create a new Google Docs document' },
-  { icon: Table2, label: 'Create Sheet', message: 'Create a new Google Sheets spreadsheet' },
-  { icon: Trash2, label: 'Organize', message: 'Help me organize my Google Drive files' },
-  { icon: Search, label: 'Search', message: 'Search my Google Drive for files' },
-  { icon: Gamepad2, label: 'Play Game', message: null }, // Special handler for games
+  { icon: Shuffle, label: 'Random File', message: 'Create a new file with random sample data entries for testing purposes', color: 'primary' },
+  { icon: Edit, label: 'Edit File', message: 'I want to edit a file in my Google Drive. Show me my recent files so I can pick one.', color: 'accent' },
+  { icon: Folder, label: 'List Files', message: 'List all my Google Drive files', color: 'accent' },
+  { icon: FileText, label: 'Create Doc', message: 'Create a new Google Docs document', color: 'accent' },
+  { icon: Table2, label: 'Create Sheet', message: 'Create a new Google Sheets spreadsheet', color: 'accent' },
+  { icon: Copy, label: 'Duplicate', message: 'Show me my files so I can duplicate one', color: 'accent' },
+  { icon: FolderUp, label: 'Move File', message: 'Help me move files between folders in my Google Drive', color: 'accent' },
+  { icon: FileArchive, label: 'Backup', message: 'Create a backup of my important Google Drive files', color: 'accent' },
+  { icon: Star, label: 'Starred', message: 'Show me my starred files in Google Drive', color: 'accent' },
+  { icon: Trash2, label: 'Organize', message: 'Help me organize my Google Drive files', color: 'accent' },
+  { icon: Search, label: 'Search', message: 'Search my Google Drive for files', color: 'accent' },
+  { icon: Gamepad2, label: 'Play Game', message: null, color: 'secondary' },
 ];
 
 const FIX_AUTH_MESSAGE = `You are an AI worker connected to Toolhouse AI. Your main task is to create and manage files in the user's Google Drive.
@@ -105,27 +111,47 @@ const MessageList = ({ messages, isLoading, onSendMessage, onOpenGames }: Messag
             </p>
             
             {/* Quick action buttons */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6">
               {QUICK_ACTIONS.map((action, i) => (
                 <button
                   key={i}
                   onClick={() => handleQuickAction(action)}
-                  className={`group relative px-4 py-3 rounded-lg border-2 text-sm text-foreground transition-all duration-200 flex flex-col items-center gap-2 arcade-button-press ${
-                    action.message === null 
+                  className={`group relative px-3 py-2.5 rounded-lg border-2 text-sm text-foreground transition-all duration-200 flex flex-col items-center gap-1.5 arcade-button-press ${
+                    action.color === 'secondary' 
                       ? 'bg-secondary/20 border-secondary hover:bg-secondary/30 hover:arcade-glow-yellow' 
+                      : action.color === 'primary'
+                      ? 'bg-primary/20 border-primary hover:bg-primary/30 hover:arcade-glow-red'
                       : 'bg-muted/50 border-border hover:border-accent hover:bg-accent/10 hover:arcade-glow'
                   }`}
                 >
-                  <action.icon className={`w-5 h-5 group-hover:scale-110 transition-transform ${
-                    action.message === null ? 'text-secondary neon-flicker' : 'text-accent'
+                  <action.icon className={`w-4 h-4 group-hover:scale-110 transition-transform ${
+                    action.color === 'secondary' ? 'text-secondary neon-flicker' 
+                    : action.color === 'primary' ? 'text-primary' 
+                    : 'text-accent'
                   }`} />
-                  <span className="font-pixel text-[8px]">{action.label}</span>
+                  <span className="font-pixel text-[7px] text-center leading-tight">{action.label}</span>
                   {/* Pixel hover effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <div className={`absolute top-0 left-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
-                    <div className={`absolute top-0 right-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
-                    <div className={`absolute bottom-0 left-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
-                    <div className={`absolute bottom-0 right-0 w-2 h-2 ${action.message === null ? 'bg-secondary' : 'bg-accent'}`} />
+                    <div className={`absolute top-0 left-0 w-1.5 h-1.5 ${
+                      action.color === 'secondary' ? 'bg-secondary' 
+                      : action.color === 'primary' ? 'bg-primary' 
+                      : 'bg-accent'
+                    }`} />
+                    <div className={`absolute top-0 right-0 w-1.5 h-1.5 ${
+                      action.color === 'secondary' ? 'bg-secondary' 
+                      : action.color === 'primary' ? 'bg-primary' 
+                      : 'bg-accent'
+                    }`} />
+                    <div className={`absolute bottom-0 left-0 w-1.5 h-1.5 ${
+                      action.color === 'secondary' ? 'bg-secondary' 
+                      : action.color === 'primary' ? 'bg-primary' 
+                      : 'bg-accent'
+                    }`} />
+                    <div className={`absolute bottom-0 right-0 w-1.5 h-1.5 ${
+                      action.color === 'secondary' ? 'bg-secondary' 
+                      : action.color === 'primary' ? 'bg-primary' 
+                      : 'bg-accent'
+                    }`} />
                   </div>
                 </button>
               ))}
