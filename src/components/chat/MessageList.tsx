@@ -2,7 +2,11 @@ import { useEffect, useRef } from 'react';
 import MessageBubble, { Message } from './MessageBubble';
 import LoadingIndicator from './LoadingIndicator';
 import LeaderboardWidget from '@/components/LeaderboardWidget';
-import { Folder, FileText, Table2, Trash2, Search, Shield, Gamepad2, Shuffle, Edit, Copy, FolderUp, FileArchive, Star } from 'lucide-react';
+import { 
+  Folder, FileText, Table2, Trash2, Search, Shield, Gamepad2, 
+  Shuffle, Edit, Copy, FolderUp, FileArchive, Star, 
+  FilePlus, Download, Share2, HardDrive, Cloud, Zap
+} from 'lucide-react';
 
 interface MessageListProps {
   messages: Message[];
@@ -11,19 +15,44 @@ interface MessageListProps {
   onOpenGames?: () => void;
 }
 
-const QUICK_ACTIONS = [
-  { icon: Shuffle, label: 'Random File', message: 'Create a new file with random sample data entries for testing purposes', color: 'primary' },
-  { icon: Edit, label: 'Edit File', message: 'I want to edit a file in my Google Drive. Show me my recent files so I can pick one.', color: 'accent' },
-  { icon: Folder, label: 'List Files', message: 'List all my Google Drive files', color: 'accent' },
-  { icon: FileText, label: 'Create Doc', message: 'Create a new Google Docs document', color: 'accent' },
-  { icon: Table2, label: 'Create Sheet', message: 'Create a new Google Sheets spreadsheet', color: 'accent' },
-  { icon: Copy, label: 'Duplicate', message: 'Show me my files so I can duplicate one', color: 'accent' },
-  { icon: FolderUp, label: 'Move File', message: 'Help me move files between folders in my Google Drive', color: 'accent' },
-  { icon: FileArchive, label: 'Backup', message: 'Create a backup of my important Google Drive files', color: 'accent' },
-  { icon: Star, label: 'Starred', message: 'Show me my starred files in Google Drive', color: 'accent' },
-  { icon: Trash2, label: 'Organize', message: 'Help me organize my Google Drive files', color: 'accent' },
-  { icon: Search, label: 'Search', message: 'Search my Google Drive for files', color: 'accent' },
-  { icon: Gamepad2, label: 'Play Game', message: null, color: 'secondary' },
+// Grouped actions for better organization
+const ACTION_GROUPS = [
+  {
+    title: 'CREATE',
+    actions: [
+      { icon: Shuffle, label: 'Random File', message: 'Create a new file with random sample data entries for testing purposes', color: 'primary' },
+      { icon: FileText, label: 'New Doc', message: 'Create a new Google Docs document', color: 'accent' },
+      { icon: Table2, label: 'New Sheet', message: 'Create a new Google Sheets spreadsheet', color: 'accent' },
+      { icon: FilePlus, label: 'New Folder', message: 'Create a new folder in my Google Drive', color: 'accent' },
+    ]
+  },
+  {
+    title: 'MANAGE',
+    actions: [
+      { icon: Edit, label: 'Edit File', message: 'I want to edit a file in my Google Drive. Show me my recent files so I can pick one.', color: 'accent' },
+      { icon: Copy, label: 'Duplicate', message: 'Show me my files so I can duplicate one', color: 'accent' },
+      { icon: FolderUp, label: 'Move', message: 'Help me move files between folders in my Google Drive', color: 'accent' },
+      { icon: Share2, label: 'Share', message: 'Help me share a file from my Google Drive with someone', color: 'accent' },
+    ]
+  },
+  {
+    title: 'EXPLORE',
+    actions: [
+      { icon: Folder, label: 'All Files', message: 'List all my Google Drive files', color: 'accent' },
+      { icon: Star, label: 'Starred', message: 'Show me my starred files in Google Drive', color: 'accent' },
+      { icon: Search, label: 'Search', message: 'Search my Google Drive for files', color: 'accent' },
+      { icon: Download, label: 'Recent', message: 'Show me my recently modified files in Google Drive', color: 'accent' },
+    ]
+  },
+  {
+    title: 'UTILITIES',
+    actions: [
+      { icon: FileArchive, label: 'Backup', message: 'Create a backup of my important Google Drive files', color: 'accent' },
+      { icon: Trash2, label: 'Cleanup', message: 'Help me find and remove duplicate or old files in my Google Drive', color: 'accent' },
+      { icon: HardDrive, label: 'Storage', message: 'Show me my Google Drive storage usage and largest files', color: 'accent' },
+      { icon: Gamepad2, label: 'Games', message: null, color: 'secondary' },
+    ]
+  },
 ];
 
 const FIX_AUTH_MESSAGE = `You are an AI worker connected to Toolhouse AI. Your main task is to create and manage files in the user's Google Drive.
@@ -71,7 +100,7 @@ const MessageList = ({ messages, isLoading, onSendMessage, onOpenGames }: Messag
     }
   }, [messages, isLoading]);
 
-  const handleQuickAction = (action: typeof QUICK_ACTIONS[0]) => {
+  const handleQuickAction = (action: { message: string | null }) => {
     if (action.message === null && onOpenGames) {
       onOpenGames();
     } else if (action.message && onSendMessage) {
@@ -85,97 +114,115 @@ const MessageList = ({ messages, isLoading, onSendMessage, onOpenGames }: Messag
       className="flex-1 overflow-y-auto arcade-scrollbar"
     >
       {messages.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full px-4 py-8">
-          <div className="text-center max-w-lg w-full">
-            {/* Animated arcade logo */}
-            <div className="relative mb-8">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-primary to-destructive rounded-lg arcade-glow-red flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <span className="font-pixel text-2xl text-primary-foreground">AI</span>
+        <div className="flex flex-col items-center justify-center h-full px-4 py-6 relative">
+          {/* Floating file decorations */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <FileText className="floating-file w-8 h-8 text-accent left-[5%] top-[20%]" style={{ animationDelay: '0s' }} />
+            <Table2 className="floating-file w-6 h-6 text-secondary left-[85%] top-[15%]" style={{ animationDelay: '2s' }} />
+            <Folder className="floating-file w-10 h-10 text-primary left-[90%] top-[60%]" style={{ animationDelay: '4s' }} />
+            <Cloud className="floating-file w-12 h-12 text-secondary/50 left-[8%] top-[70%]" style={{ animationDelay: '6s' }} />
+          </div>
+
+          <div className="text-center max-w-2xl w-full relative z-10">
+            {/* Drive-themed header */}
+            <div className="relative mb-6">
+              <div className="w-24 h-24 mx-auto relative">
+                {/* Outer ring */}
+                <div className="absolute inset-0 rounded-full border-2 border-secondary/30 animate-spin" style={{ animationDuration: '20s' }} />
+                {/* Inner container */}
+                <div className="absolute inset-2 bg-gradient-to-br from-card to-background rounded-xl arcade-glow flex items-center justify-center upload-pulse">
+                  <HardDrive className="w-10 h-10 text-secondary drive-icon-glow" />
+                </div>
+                {/* Orbiting icons */}
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2">
+                  <FileText className="w-4 h-4 text-accent" />
+                </div>
+                <div className="absolute top-1/2 -right-1 -translate-y-1/2">
+                  <Table2 className="w-4 h-4 text-primary" />
+                </div>
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
+                  <Folder className="w-4 h-4 text-secondary" />
+                </div>
               </div>
-              {/* Pixel corners */}
-              <div className="absolute -top-2 -left-2 w-4 h-4 bg-secondary" />
-              <div className="absolute -top-2 -right-2 w-4 h-4 bg-accent" />
-              <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-accent" />
-              <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-secondary" />
             </div>
             
-            <h2 className="font-pixel text-secondary text-xs md:text-sm mb-2 tracking-wider animate-pulse">
-              INSERT COIN
+            <h2 className="font-pixel text-secondary text-sm md:text-base mb-1 tracking-wider">
+              ARCADE DRIVE
             </h2>
-            <h3 className="font-pixel text-accent text-[10px] md:text-xs mb-6">
-              GOOGLE DRIVE ASSISTANT
-            </h3>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Zap className="w-4 h-4 text-primary animate-pulse" />
+              <h3 className="font-pixel text-accent text-[10px] md:text-xs">
+                AI-POWERED FILE MANAGER
+              </h3>
+              <Zap className="w-4 h-4 text-primary animate-pulse" />
+            </div>
             
-            <p className="text-muted-foreground mb-8 text-sm">
-              Press a button to begin your quest:
+            <p className="text-muted-foreground mb-6 text-sm">
+              Select an action to manage your Google Drive:
             </p>
             
-            {/* Quick action buttons */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6">
-              {QUICK_ACTIONS.map((action, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleQuickAction(action)}
-                  className={`group relative px-3 py-2.5 rounded-lg border-2 text-sm text-foreground transition-all duration-200 flex flex-col items-center gap-1.5 arcade-button-press ${
-                    action.color === 'secondary' 
-                      ? 'bg-secondary/20 border-secondary hover:bg-secondary/30 hover:arcade-glow-yellow' 
-                      : action.color === 'primary'
-                      ? 'bg-primary/20 border-primary hover:bg-primary/30 hover:arcade-glow-red'
-                      : 'bg-muted/50 border-border hover:border-accent hover:bg-accent/10 hover:arcade-glow'
-                  }`}
-                >
-                  <action.icon className={`w-4 h-4 group-hover:scale-110 transition-transform ${
-                    action.color === 'secondary' ? 'text-secondary neon-flicker' 
-                    : action.color === 'primary' ? 'text-primary' 
-                    : 'text-accent'
-                  }`} />
-                  <span className="font-pixel text-[7px] text-center leading-tight">{action.label}</span>
-                  {/* Pixel hover effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <div className={`absolute top-0 left-0 w-1.5 h-1.5 ${
-                      action.color === 'secondary' ? 'bg-secondary' 
-                      : action.color === 'primary' ? 'bg-primary' 
-                      : 'bg-accent'
-                    }`} />
-                    <div className={`absolute top-0 right-0 w-1.5 h-1.5 ${
-                      action.color === 'secondary' ? 'bg-secondary' 
-                      : action.color === 'primary' ? 'bg-primary' 
-                      : 'bg-accent'
-                    }`} />
-                    <div className={`absolute bottom-0 left-0 w-1.5 h-1.5 ${
-                      action.color === 'secondary' ? 'bg-secondary' 
-                      : action.color === 'primary' ? 'bg-primary' 
-                      : 'bg-accent'
-                    }`} />
-                    <div className={`absolute bottom-0 right-0 w-1.5 h-1.5 ${
-                      action.color === 'secondary' ? 'bg-secondary' 
-                      : action.color === 'primary' ? 'bg-primary' 
-                      : 'bg-accent'
-                    }`} />
+            {/* Grouped action buttons */}
+            <div className="space-y-4 mb-6">
+              {ACTION_GROUPS.map((group, groupIndex) => (
+                <div key={group.title} className="stagger-item" style={{ animationDelay: `${groupIndex * 0.1}s` }}>
+                  {/* Group title */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+                    <span className="font-pixel text-[8px] text-muted-foreground tracking-widest">{group.title}</span>
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
                   </div>
-                </button>
+                  
+                  {/* Action buttons */}
+                  <div className="grid grid-cols-4 gap-2">
+                    {group.actions.map((action, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleQuickAction(action)}
+                        className={`group relative px-2 py-2.5 rounded-lg border text-sm text-foreground transition-all duration-200 flex flex-col items-center gap-1.5 arcade-button-press data-stream ${
+                          action.color === 'secondary' 
+                            ? 'bg-secondary/10 border-secondary/50 hover:bg-secondary/20 hover:border-secondary hover:arcade-glow-yellow' 
+                            : action.color === 'primary'
+                            ? 'bg-primary/10 border-primary/50 hover:bg-primary/20 hover:border-primary hover:arcade-glow-red'
+                            : 'bg-card/50 border-border/50 hover:border-accent hover:bg-accent/10 hover:arcade-glow'
+                        }`}
+                      >
+                        <action.icon className={`w-5 h-5 group-hover:scale-110 transition-all duration-200 ${
+                          action.color === 'secondary' ? 'text-secondary group-hover:drop-shadow-[0_0_8px_hsl(var(--secondary))]' 
+                          : action.color === 'primary' ? 'text-primary group-hover:drop-shadow-[0_0_8px_hsl(var(--primary))]' 
+                          : 'text-accent group-hover:drop-shadow-[0_0_8px_hsl(var(--accent))]'
+                        }`} />
+                        <span className="font-pixel text-[7px] text-center leading-tight">{action.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
 
             {/* Leaderboard Widget */}
-            <LeaderboardWidget className="mb-6" />
+            <LeaderboardWidget className="mb-4" />
 
             {/* Fix Authentication button */}
             <button
               onClick={() => onSendMessage && onSendMessage(FIX_AUTH_MESSAGE)}
-              className="w-full group relative px-4 py-3 bg-primary/20 rounded-lg border-2 border-primary text-sm text-foreground hover:bg-primary/30 transition-all duration-200 hover:arcade-glow-red flex items-center justify-center gap-3 arcade-button-press"
+              className="w-full group relative px-4 py-3 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-lg border border-primary/50 text-sm text-foreground hover:border-primary transition-all duration-200 hover:arcade-glow-red flex items-center justify-center gap-3 arcade-button-press overflow-hidden"
             >
-              <Shield className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-              <span className="font-pixel text-[10px] text-primary">FIX AUTHENTICATION</span>
-              {/* Scanline effect */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <Shield className="w-5 h-5 text-primary group-hover:scale-110 transition-transform relative z-10" />
+              <span className="font-pixel text-[10px] text-primary relative z-10">CONNECT GOOGLE DRIVE</span>
             </button>
 
-            {/* Decorative elements */}
-            <div className="mt-8 flex justify-center gap-2">
-              <div className="w-3 h-3 bg-primary rounded-full animate-pulse" />
-              <div className="w-3 h-3 bg-secondary rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
-              <div className="w-3 h-3 bg-accent rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
+            {/* Status bar */}
+            <div className="mt-6 flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                <span className="font-pixel">SYSTEM ONLINE</span>
+              </div>
+              <div className="w-px h-3 bg-border" />
+              <div className="flex items-center gap-1">
+                <Cloud className="w-3 h-3 text-secondary" />
+                <span className="font-pixel">CLOUD READY</span>
+              </div>
             </div>
           </div>
         </div>
