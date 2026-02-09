@@ -781,4 +781,130 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
   }
+
+  /* Drive-themed floating files animation */
+  .floating-file {
+    position: absolute;
+    opacity: 0.15;
+    animation: floatFile 15s ease-in-out infinite;
+  }
+
+  @keyframes floatFile {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-20px) rotate(5deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(-3deg);
+    }
+    75% {
+      transform: translateY(-25px) rotate(3deg);
+    }
+  }
+
+  /* Data stream animation */
+  .data-stream {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .data-stream::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--accent) / 0.1) 50%,
+      transparent 100%
+    );
+    animation: dataFlow 3s linear infinite;
+  }
+
+  @keyframes dataFlow {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+  /* File upload pulse */
+  .upload-pulse {
+    animation: uploadPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes uploadPulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 hsl(var(--secondary) / 0.4);
+    }
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 10px hsl(var(--secondary) / 0);
+    }
+  }
+
+  /* Folder open animation */
+  .folder-open {
+    transition: transform 0.3s ease;
+  }
+
+  .folder-open:hover {
+    transform: perspective(100px) rotateX(-10deg) translateY(-5px);
+  }
+
+  /* Circuit board pattern */
+  .circuit-pattern {
+    background-image: 
+      linear-gradient(90deg, hsl(var(--accent) / 0.05) 1px, transparent 1px),
+      linear-gradient(hsl(var(--accent) / 0.05) 1px, transparent 1px),
+      radial-gradient(circle at 25px 25px, hsl(var(--accent) / 0.1) 2px, transparent 2px);
+    background-size: 50px 50px, 50px 50px, 50px 50px;
+  }
+
+  /* Stagger animation for grid items */
+  .stagger-item {
+    opacity: 0;
+    animation: staggerIn 0.4s ease-out forwards;
+  }
+
+  @keyframes staggerIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Drive icon glow */
+  .drive-icon-glow {
+    filter: drop-shadow(0 0 8px hsl(var(--secondary) / 0.6));
+    transition: filter 0.3s ease;
+  }
+
+  .drive-icon-glow:hover {
+    filter: drop-shadow(0 0 15px hsl(var(--secondary)));
+  }
+
+  /* Connection line animation */
+  .connection-line {
+    stroke-dasharray: 5;
+    animation: dashMove 1s linear infinite;
+  }
+
+  @keyframes dashMove {
+    to {
+      stroke-dashoffset: -10;
+    }
+  }
 }
